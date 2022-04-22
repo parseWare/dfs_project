@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
 
-from dfs_app.models import Dfs_model_new
-from dfs_app.utility import insertRec
+from dfs_app.models import Dfs_model
+from dfs_app.utility import insertRec,insertRecCsv
 # Create your views here.
 
 def get_record(request, tab, id):
-    rec = Dfs_model_new.objects.filter(id=id).values()
+    rec = Dfs_model.objects.filter(id=id).values()
     html = "<html>Hello_record</html>"
     print(rec)
     # return HttpResponse(html)
@@ -15,7 +15,7 @@ def get_record(request, tab, id):
 
 def get_table(request, tab):
     # return render(request, 'result.html', {'para' : para})
-    rec = Dfs_model_new.objects.all().values()
+    rec = Dfs_model.objects.all().values()
     html = "<html>Hello_record</html>"
     # print(rec)
     print(rec)
@@ -29,6 +29,15 @@ def insert_rec(request):
     # record=[['Abhijeet',874,'bsd.jpg','Kanpur',8609]]
     for rec in record:
         insertRec(rec)
+
+    html = "<html>Record Inserted!</html>"
+    return HttpResponse(html)
+
+def insert_rec_csv(request):
+
+    path='/home/parth/411_patient_data.csv'
+
+    insertRecCsv(path)
 
     html = "<html>Record Inserted!</html>"
     return HttpResponse(html)
