@@ -56,6 +56,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'dfs_demo.urls'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 CORS_ORIGIN_ALLOW_ALL = True
 TEMPLATES = [
     {
