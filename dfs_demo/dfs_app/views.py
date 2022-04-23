@@ -1,26 +1,48 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
-from dfs_app.models import Dfs_model
+from dfs_app.models import Dfs_model, Dfs_model_covid
 from dfs_app.utility import insertRec,insertRecCsv
 # Create your views here.
 
 def get_record(request, tab, id):
-    rec = Dfs_model.objects.filter(id=id).values()
-    html = "<html>Hello_record</html>"
-    print(rec)
-    # return HttpResponse(html)
-    return render(request, 'display.html', {'lst' : rec, 'cnt': range(len(rec[0]))})
+    print('REQUEST: ',request.path)
+    req_path=request.path
+    model_name=req_path.split('/')[1]
+
+    rec=''
+    if model_name=='dfs_app_dfs_model':
+        rec = Dfs_model.objects.filter(id=id).values()
+        html = "<html>Hello_record</html>"
+        # return HttpResponse(html)
+        # return render(request, 'display.html', {'lst' : rec})
+        return JsonResponse(rec)
+    else:
+        rec=Dfs_model_covid.objects.filter(id=id).values()
+        html = "<html>Hello_record</html>"
+        # return HttpResponse(html)
+        # return render(request, 'display_covid.html', {'lst' : rec})
+        return JsonResponse(rec)
+    
 
 def get_table(request, tab):
     # return render(request, 'result.html', {'para' : para})
-    rec = Dfs_model.objects.all().values()
-    html = "<html>Hello_record</html>"
-    # print(rec)
-    print(rec)
-    # return HttpResponse(html)
-    return render(request, 'display.html', {'lst' : rec, 'cnt': range(len(rec[0]))})
+    req_path=request.path
+    model_name=req_path.split('/')[1]
+
+    rec=''
+    if model_name=='dfs_app_dfs_model':
+        rec = list(Dfs_model.objects.all().values())
+        html = "<html>Hello_record</html>"
+        # return render(request, 'display.html', {'lst' : rec, 'cnt': range(len(rec[0]))})
+        return JsonResponse(rec, safe=False)
+    else:
+        rec=list(Dfs_model_covid.objects.all().values())
+        html = "<html>Hello_record</html>"
+        # return render(request, 'display_covid.html', {'lst' : rec, 'cnt': range(len(rec[0]))})
+        return JsonResponse(rec, safe=False)
+    
 
 def insert_rec(request):
     # print('in views')
